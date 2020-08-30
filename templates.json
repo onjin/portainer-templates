@@ -1,0 +1,16 @@
+[
+  {
+    "type": "stack",
+    "title": "Matomo",
+    "name": "matomo",
+    "description": "Google Analytics alternative that protects your data and your customers' privacy",
+    "note": "",
+    "categories": ["Monitoring"],
+    "platform": "linux",
+    "logo": "https://static.matomo.org/wp-content/uploads/2018/10/matomo-logo-final-1-340x50.png",
+    "repository": {
+      "url": "https://github.com/onjin/portainer/templates",
+      "stackfile": "stacks/matomo/docker-compose.yml"
+    }
+  }
+]

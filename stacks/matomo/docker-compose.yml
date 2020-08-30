@@ -1,0 +1,51 @@
+version: "3.3"
+
+services:
+  db:
+    image: mariadb
+    command: --max-allowed-packet=64MB
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=matomo
+      - MYSQL_USER=matomo
+    networks:
+      - matomo
+
+  app:
+    image: matomo
+    restart: always
+    volumes:
+      - matomo:/var/www/html
+    environment:
+      - MATOMO_DATABASE_HOST=db
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=matomo
+      - MYSQL_USER=matomo
+      - MATOMO_DATABASE_ADAPTER=mysql
+      - MATOMO_DATABASE_TABLES_PREFIX=matomo_
+      - MATOMO_DATABASE_USERNAME=matomo
+      - MATOMO_DATABASE_PASSWORD=
+      - MATOMO_DATABASE_DBNAME=matomo
+    networks:
+      - matomo
+      -traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.matomo.loadbalancer.server.port=80"
+        - "traefik.http.routers.matomo.rule=Host(`matomo.onjin.net`)"
+        - "traefik.http.routers.matomo.entrypoints=websecure"
+        - "traefik.http.routers.matomo.tls.certresolver=letsencryptresolver"
+        - "traefik.docker.network=traefik-public"
+
+volumes:
+  db:
+  matomo:
+networks:
+  traefik-public:
+    external: true
