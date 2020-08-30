@@ -32,7 +32,7 @@ services:
       - MATOMO_DATABASE_DBNAME=matomo
     networks:
       - matomo
-      -traefik-public
+      - traefik-public
     deploy:
       replicas: 1
       labels:
