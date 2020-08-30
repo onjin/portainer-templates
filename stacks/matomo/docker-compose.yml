@@ -47,5 +47,6 @@ volumes:
   db:
   matomo:
 networks:
+  matomo: {}
   traefik-public:
     external: true
